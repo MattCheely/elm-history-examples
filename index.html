@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <script src="dist/smart.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/javascript">
+
+      let historyPosition = 0;
+
+      const app = Elm.SmartCancellation.init({ node: document.getElementById("app") });
+
+      // Used to set navigation counter after every transition
+      app.ports.pushUrl.subscribe((url) => {
+        historyPosition += 1;
+        window.history.pushState(historyPosition, null, url);
+        log(`app navigated to: ${url}`);
+        sendUrl(1);
+      });
+
+      app.ports.moveHistoryBy.subscribe((delta) => {
+        console.log(`traversing history by ${delta}`);
+        window.history.go(delta);
+      })
+
+      window.addEventListener("popstate", (event) => {
+        let delta = 1; // default is to advance history
+        if(event.state !== null) {
+          // event.state only exists when we go back to a previous history
+          // in the app
+          delta = event.state - historyPosition;
+        } else {
+          // Forward navigation from outside the app. We need to replace the
+          // history entry with one that has a correct position as state
+          // otherwise, there will be a null state in the history that
+          // will cause bad transitions if we interact with it.
+          window.history.replaceState(historyPosition + delta, {});
+        }
+        historyPosition = historyPosition + delta;
+        log(`popstate to ${window.location.toString()}`, { delta: delta , pos: historyPosition })
+        sendUrl(delta);
+      });
+
+      function sendUrl(delta) {
+        let change = {
+          url: window.location.toString(),
+          delta: delta
+          
+        }
+        app.ports.urlChanged.send(change);
+      }
+
+      function log() {
+        console.log(...arguments, `historyState: ${window.history.state}`);
+      }
+
+    </script>
+  <body>
+</html>

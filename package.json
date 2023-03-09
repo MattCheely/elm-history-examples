@@ -1,0 +1,15 @@
+{
+  "name": "history-demo",
+  "version": "1.0.0",
+  "description": "To try them out, just run `elm reactor` and navigate to the file of interest.",
+  "main": "index.js",
+  "scripts": {
+    "start-simple": "elm-live src/SimpleCancellation.elm -- --output=dist/simple.js",
+    "start-smart": "elm-live src/SmartCancellation.elm -- --output=dist/smart.js --debug"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "elm-live": "^4.0.2"
+  }
+}
