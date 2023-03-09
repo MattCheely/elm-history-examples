@@ -4,7 +4,7 @@
   "description": "To try them out, just run `elm reactor` and navigate to the file of interest.",
   "main": "index.js",
   "scripts": {
-    "start-simple": "elm-live src/SimpleCancellation.elm -- --output=dist/simple.js",
+    "start-simple": "elm-live src/SimpleCancellation.elm --dir=dist-simple -- --output=dist-simple/index.html --debug",
     "start-smart": "elm-live src/SmartCancellation.elm -- --output=dist/smart.js --debug"
   },
   "author": "",
